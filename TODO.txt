@@ -1,0 +1,31 @@
+RECAP SUBMISSIONS
+1- 30% train 5%val, x3 epochs --> 1h29 --> 0.705
+2- 90% train, 10%val, x2 epochs --> 2h44 --> 0.713  (val 0.60 et 0.65)
+3- 90% train, 10%val, x2 epochs --> 3h2 --> 0.704 (val 0.57 et 0.64)
+4- no human voice: 90% train, 10%val, x2 epochs --> 3h2 --> 0.728 (val 0.59 et 0.66)
+5- 30%/5%, 2epochs (centralized code) seed42--> 1h --> 0.646 (val 0.16 et 0.27)
+6- 30%/5%, 2epochs (centralized code) seed727 --> ?? --> 0.690 (val 0.17 et 0.25)
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+- try BCE, Focal loss? include secondary labels?
+- try dropout
+- change n_mels, n_fft etc
+
+Eval perf
+- check which classes model struggles on
+- evaluate extent of domain shift, and try to come up with a solution
+    -- cluster data in different locations and measure of performance differs a lot.
+- visualize how model performs on soundscapes
+
+
+rough ideas
+- use ratings (data selection)
+- data augmentation (spectraugment)
+
+
+when model is good enough
+- train soundscapes pseudo labels
+- folds & cross validation
+
