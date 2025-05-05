@@ -1,15 +1,20 @@
 RECAP SUBMISSIONS
-1- 30% train 5%val, x3 epochs --> 1h29 --> 0.705
-2- 90% train, 10%val, x2 epochs --> 2h44 --> 0.713  (val 0.60 et 0.65)
-3- 90% train, 10%val, x2 epochs --> 3h2 --> 0.704 (val 0.57 et 0.64)
-4- no human voice: 90% train, 10%val, x2 epochs --> 3h2 --> 0.728 (val 0.59 et 0.66)
-5- 30%/5%, 2epochs (centralized code) seed42--> 1h --> 0.646 (val 0.16 et 0.27)
-6- 30%/5%, 2epochs (centralized code) seed727 --> ?? --> 0.690 (val 0.17 et 0.25)
-
+1- 30% train 5%val, x3 epochs --> 1h29 --> 0.705 LB
+2- 90% train, 10%val, x2 epochs --> 2h44 --> 0.713 LB  (val 0.60 et 0.65)
+3- 90% train, 10%val, x2 epochs --> 3h2 --> 0.704 LB (val 0.57 et 0.64)
+4- no human voice: 90% train, 10%val, x2 epochs --> 3h2 --> 0.728 LB (val 0.59 et 0.66)
+5- 30%/5%, 2epochs (centralized code) seed42--> 1h --> 0.646 LB (val 0.16 et 0.27)
+6- 30%/5%, 2epochs (centralized code) seed727 --> ?? --> 0.690 LB (val 0.17 et 0.25)
+7- 90/10% x2ep, BCEWithLogits, GPU P100 --> 2h35 --> 0.504 LB (val 0.99 et 0.99?!)
+8 - même model mais inference torch.sigmoid(logits) au lieu de (logits > 0).int() --> 0.721 LB
+9 - idem mais modele v4 avec inference sigmoid: 0.703 LB
+10 - 
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-- try BCE, Focal loss? include secondary labels?
+ 
+- tweak some hyperparameters like batch size, n_mel, nfft, lr, epoch, etc.
+- try BCE include secondary labels
+- data augmentation, mixup,
 - try dropout
 - change n_mels, n_fft etc
 

@@ -1,7 +1,9 @@
+import ast
 import pandas as pd
 import librosa
 import numpy as np
 import json
+from sklearn.preprocessing import MultiLabelBinarizer
 import torch
 from torch.utils.data import Dataset
 import pickle
@@ -67,6 +69,8 @@ class AudioDataset(Dataset):
     def __init__(self, training_chunks):
         self.training_chunks = training_chunks
         self.label_to_int = json.load(open(LABEL_MAP_FILE))
+        self.mlb = MultiLabelBinarizer(classes=list(self.label_to_int.values()))
+        self.mlb.fit([[label] for label in self.label_to_int.values()])
 
     def __len__(self):
         return len(self.training_chunks)
@@ -76,6 +80,7 @@ class AudioDataset(Dataset):
         audio_path = ROOT + 'train_audio/' + row['filename']
         audio_start = row['audio_start']
         primary_label = row['primary_label']
+        secondary_labels = ast.literal_eval(row['secondary_labels'])
 
         # Load the audio file
         waveform, sample_rate = librosa.load(audio_path, sr=None, offset=audio_start, duration=5.0)
@@ -90,11 +95,16 @@ class AudioDataset(Dataset):
         spectrogram_db = librosa.power_to_db(spectrogram, ref=np.max)
         spectrogram_tensor = process_spectrogram(spectrogram_db)
 
-        # Map primary_label to an integer
+        # Map primary_label and secondary_labels to integers
         primary_label = self.label_to_int[primary_label]
+        secondary_labels = [self.label_to_int[label] for label in secondary_labels if label in self.label_to_int]
 
-        # Return x (spectrogram) and y (primary_label)
-        return spectrogram_tensor, primary_label
+        # One-hot encode the labels
+        all_labels = [primary_label] + secondary_labels
+        one_hot_labels = self.mlb.transform([all_labels])[0]
+
+        # Return x (spectrogram) and y (one-hot encoded labels)
+        return spectrogram_tensor, one_hot_labels
 
 
 
